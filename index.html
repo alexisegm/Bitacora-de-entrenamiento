@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitácora de Entrenamiento</title>
+    <!-- [HTML-1] Enlace a la capa de estilos -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>Mi Bitácora de Entrenamiento</h1>
+    </header>
+
+    <!-- [HTML-1] Contenedor principal: hook donde JS inyectará el contenido dinámico -->
+    <main id="app-container" class="container">
+        
+        <!-- [HTML-2] INICIO PLANTILLA ESTÁTICA DE UN DÍA -->
+        <!-- Nota: usamos data-day-id como hook para la lógica de JS -->
+        <section class="day-card" data-day-id="1">
+            <header class="day-card-header">
+                <h2 class="day-title">Lunes</h2>
+                <p class="day-progress">0 de 2 completados</p>
+            </header>
+            
+            <ul class="exercise-list">
+                
+                <!-- [HTML-3] INICIO PLANTILLA DE EJERCICIO -->
+                <!-- Nota: usamos data-exercise-id para identificar qué se marca -->
+                <li class="exercise-item" data-exercise-id="101">
+                    <input type="checkbox" id="ex-101" class="exercise-checkbox">
+                    <label for="ex-101" class="exercise-label">
+                        <span class="exercise-name">Press de Pecho</span>
+                        <span class="exercise-details">4 series x 10 reps</span>
+                    </label>
+                </li>
+                <!-- FIN PLANTILLA DE EJERCICIO -->
+
+                <!-- Segundo ejercicio de prueba para validar espaciados en CSS -->
+                <li class="exercise-item" data-exercise-id="102">
+                    <input type="checkbox" id="ex-102" class="exercise-checkbox">
+                    <label for="ex-102" class="exercise-label">
+                        <span class="exercise-name">Sentadillas</span>
+                        <span class="exercise-details">4 series x 12 reps</span>
+                    </label>
+                </li>
+
+            </ul>
+        </section>
+        <!-- FIN PLANTILLA ESTÁTICA DE UN DÍA -->
+
+    </main>
+
+    <!-- [HTML-1] Enlace a la capa de comportamiento. defer asegura que el DOM cargue antes -->
+    <script src="app.js" defer></script>
+</body>
+</html>
