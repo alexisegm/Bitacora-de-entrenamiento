@@ -1,45 +1,150 @@
 /* =========================================
-   [CSS-1] RESET Y VARIABLES BASE
+   IMPORTACIÓN DE FUENTES (Google Fonts)
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
+/* =========================================
+   [CSS-1] RESET Y VARIABLES BASE (Fase 1 y 2)
    ========================================= */
 :root {
     --bg-color: #f4f7f6;
-    --card-bg: #ffffff;
+    --card-bg: #e8f5e9; /* Verde muy claro solicitado para los días */
     --text-main: #333333;
-    --text-muted: #888888;
-    --primary-color: #4CAF50; /* Verde para indicar el check */
-    --border-color: #e0e0e0;
+    --text-muted: #555555;
+    --primary-color: #4CAF50; /* Verde check */
+    --accent-color: #2e7d32; /* Verde oscuro para textos importantes */
+    --border-color: #c8e6c9;
     --font-family: system-ui, -apple-system, sans-serif;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: var(--font-family);
-    background-color: var(--bg-color);
     color: var(--text-main);
     padding: 20px;
+    
+    /* Fondo de gimnasio con capa translúcida para no perder legibilidad */
+    background-image: linear-gradient(rgba(244, 247, 246, 0.85), rgba(244, 247, 246, 0.85)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
 }
 
 /* =========================================
-   [CSS-2] LAYOUT Y RESPONSIVE
+   TÍTULOS Y TIPOGRAFÍA
    ========================================= */
 .app-header {
     text-align: center;
     margin-bottom: 30px;
 }
 
+.app-header h1 {
+    font-size: 2.5rem;
+}
+
+.cursive-text {
+    font-family: 'Dancing Script', cursive;
+    color: var(--accent-color);
+    font-size: 1.4em; /* La hacemos un poco más grande */
+}
+
+/* =========================================
+   [CSS-4 y CSS-5] PANEL DE RESUMEN SEMANAL (Fase 2)
+   ========================================= */
+.summary-panel {
+    background-color: #ffffff; /* Este lo dejamos blanco para que destaque del fondo y las tarjetas verdes */
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 0 auto 30px auto;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    max-width: 800px;
+}
+
+/* Barra de progreso */
+.progress-bar-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    height: 20px;
+    margin: 15px 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--primary-color);
+    width: 0%; /* JS cambiará esto dinámicamente */
+    transition: width 0.4s ease;
+}
+
+/* Botones de control */
+.summary-controls {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.btn:active { transform: scale(0.95); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-danger { background-color: #f44336; color: white; }
+.btn-primary { background-color: #2196F3; color: white; }
+
+.timer-display {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff9800; /* Naranja para el reloj */
+    min-width: 60px;
+}
+
+/* Clases de utilidad */
+.hidden {
+    display: none !important; /* Oculta el mensaje de logro */
+}
+
+.achievement-message {
+    color: var(--accent-color);
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-top: 10px;
+    animation: popIn 0.5s ease-out;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* =========================================
+   [CSS-2] LAYOUT TARJETAS DE DÍAS (Fase 1 ajustada)
+   ========================================= */
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    /* Grid responsivo "mágico": 1 columna en móvil, múltiples en escritorio 
-       sin necesidad de usar media queries explícitos */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
+}
+
+/* Excepción: El summary panel no debe usar el grid de tarjetas */
+section.summary-panel.container {
+    display: block; 
 }
 
 .day-card {
@@ -54,27 +159,15 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid var(--bg-color);
+    border-bottom: 2px solid #ffffff;
     padding-bottom: 10px;
     margin-bottom: 15px;
 }
 
-.day-title {
-    font-size: 1.5rem;
-}
+.day-title { font-size: 1.5rem; color: var(--accent-color); }
+.day-progress { font-size: 0.9rem; color: var(--text-muted); font-weight: bold; }
 
-.day-progress {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    font-weight: bold;
-}
-
-.exercise-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
+.exercise-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
 
 .exercise-item {
     display: flex;
@@ -83,48 +176,30 @@ body {
     padding: 8px;
     border-radius: 6px;
     transition: background-color 0.2s ease;
+    background-color: rgba(255, 255, 255, 0.5); /* Fono blanco translúcido para cada ejercicio */
 }
 
-.exercise-item:hover {
-    background-color: var(--bg-color);
-}
+.exercise-item:hover { background-color: #ffffff; }
 
-.exercise-checkbox {
-    margin-top: 4px;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: var(--primary-color);
-}
+.exercise-checkbox { margin-top: 4px; width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary-color); }
 
-.exercise-label {
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    flex-grow: 1; /* Ocupa el espacio restante */
-}
+.exercise-label { display: flex; flex-direction: column; cursor: pointer; flex-grow: 1; }
 
-.exercise-name {
-    font-weight: bold;
-    font-size: 1rem;
-    transition: color 0.2s, text-decoration 0.2s;
-}
-
-.exercise-details {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-}
+.exercise-name { font-weight: bold; font-size: 1rem; transition: color 0.2s, text-decoration 0.2s; }
+.exercise-details { font-size: 0.85rem; color: var(--text-muted); }
 
 /* =========================================
-   [CSS-3] ESTADOS VISUALES (COMPLETADO)
+   [CSS-3] ESTADOS VISUALES COMPLETADO
    ========================================= */
-/* Esta es una "clase de estado". No se aplica en el HTML estático, 
-   sino que JavaScript la pondrá o quitará (toggle) en el elemento <li> */
-.exercise-item.is-completed {
-    opacity: 0.6;
-}
+.exercise-item.is-completed { opacity: 0.5; background-color: transparent; }
+.exercise-item.is-completed .exercise-name { text-decoration: line-through; color: var(--text-muted); }
 
-.exercise-item.is-completed .exercise-name {
-    text-decoration: line-through;
-    color: var(--text-muted);
+/* Nuevo: Estilo para el link del video que agregaremos en JS */
+.video-link {
+    font-size: 0.75rem;
+    color: #2196F3;
+    text-decoration: none;
+    margin-top: 4px;
+    display: inline-block;
 }
+.video-link:hover { text-decoration: underline; }
