@@ -8,7 +8,7 @@ const weeklyRoutine = [
         id: 1,
         name: "Lunes - Pecho",
         exercises: [
-            { id: 101, name: "Press de Pecho Plano", details: "4 series x 10 reps", completed: false, videoUrl: "https://drive.google.com/file/d/1KToIItWgxkJ5hqVVzqPh4z9Fn5PRvYci/view?usp=drive_link" },
+            { id: 101, name: "Press de Pecho Plano", details: "4 series x 10 reps", completed: false, videoUrl: "https://drive.google.com/file/d/1LYf1NHQFNNXnNzzdfgdd26RBofAgJnXe/view?usp=drive_link" },
             { id: 102, name: "Aperturas con Mancuernas", details: "3 series x 12 reps", completed: false, videoUrl: "https://drive.google.com/file/d/1XpqU96Cu8IwcG6-agc5F6p_QqZJosYjk/view?usp=drive_link" },
             { id: 103, name: "Press de Pecho Inclinado", details: "4 series x 10 reps", completed: false, videoUrl: "https://drive.google.com/file/d/1GsbK12_ZbZeBv5-YsaGE8Up4UxqkahVu/view?usp=drive_link" },
             { id: 104, name: "Pullover", details: "3 series x 12 reps", completed: false, videoUrl: "https://drive.google.com/file/d/1gsE6RYqToN3oYq2l4ZjsUq0NcWbtraQR/view?usp=drive_link" }
