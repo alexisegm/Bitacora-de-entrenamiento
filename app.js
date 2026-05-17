@@ -8,7 +8,7 @@ const weeklyRoutine = [
         id: 1,
         name: "Lunes - Pecho",
         exercises: [
-            { id: 101, name: "Press de Pecho Plano", details: "4 series x 10 reps", completed: false, videoUrl: "https://drive.google.com/file/d/1LYf1NHQFNNXnNzzdfgdd26RBofAgJnXe/view?usp=drive_link" },
+            { id: 101, name: "Press de Pecho Plano", details: "4 series x 10 reps", completed: false, videoUrl: "https://drive.google.com/file/d/1KToIItWgxkJ5hqVVzqPh4z9Fn5PRvYci/view?usp=drive_link" },
             { id: 102, name: "Aperturas con Mancuernas", details: "3 series x 12 reps", completed: false, videoUrl: "https://drive.google.com/file/d/1XpqU96Cu8IwcG6-agc5F6p_QqZJosYjk/view?usp=drive_link" },
             { id: 103, name: "Press de Pecho Inclinado", details: "4 series x 10 reps", completed: false, videoUrl: "https://drive.google.com/file/d/1GsbK12_ZbZeBv5-YsaGE8Up4UxqkahVu/view?usp=drive_link" },
             { id: 104, name: "Pullover", details: "3 series x 12 reps", completed: false, videoUrl: "https://drive.google.com/file/d/1gsE6RYqToN3oYq2l4ZjsUq0NcWbtraQR/view?usp=drive_link" }
@@ -53,6 +53,14 @@ const weeklyRoutine = [
             { id: 503, name: "Curl de Martillo", details: "4 series x 12 reps", completed: false, videoUrl: "https://drive.google.com/file/d/10c6vkpZ-g_pUi31WmT-tXoqaAZuUZe0m/view?usp=drive_link" },
             { id: 504, name: "Fondos en Paralelas (Dips)", details: "4 series al fallo", completed: false, videoUrl: "https://drive.google.com/file/d/1qiXItKZnrOif2dL7Z1UJ88o-R-bkRTU6/view?usp=drive_link" }
         ]
+    },
+    {
+        id: 6,
+        name: "Sábado - Cardio",
+        exercises: [
+            { id: 601, name: "Trotar", details: "45 minutos a ritmo constante", completed: false },
+            { id: 602, name: "Spinning", details: "30 minutos de intervalos", completed: false }
+        ]
     }
 ];
 
@@ -65,19 +73,16 @@ function updateWeeklySummary() {
     let totalExercises = 0;
     let completedExercises = 0;
 
-    // Calcular totales
     weeklyRoutine.forEach(day => {
         totalExercises += day.exercises.length;
         completedExercises += day.exercises.filter(ex => ex.completed).length;
     });
 
-    // Actualizar texto y barra
     document.getElementById('weekly-progress-text').textContent = `${completedExercises} de ${totalExercises} ejercicios completados`;
     
     const percentage = totalExercises === 0 ? 0 : (completedExercises / totalExercises) * 100;
     document.getElementById('weekly-progress-bar').style.width = `${percentage}%`;
 
-    // Evaluar meta semanal (15)
     const achievementMessage = document.getElementById('achievement-message');
     if (completedExercises >= WEEKLY_GOAL) {
         achievementMessage.classList.remove('hidden');
@@ -94,6 +99,8 @@ function renderApp() {
         
         const dayCard = document.createElement('section');
         dayCard.className = 'day-card';
+        // Agregamos id para que el menú de navegación funcione
+        dayCard.id = `day-${day.id}`;
         dayCard.dataset.dayId = day.id;
 
         dayCard.innerHTML = `
@@ -102,30 +109,69 @@ function renderApp() {
                 <p class="day-progress">${completedCount} de ${day.exercises.length} completados</p>
             </header>
             <ul class="exercise-list">
-                ${day.exercises.map(exercise => `
+                ${day.exercises.map(exercise => {
+                    // Condicional para renderizar el enlace solo si existe videoUrl
+                    const videoLinkHTML = exercise.videoUrl 
+                        ? `<a href="${exercise.videoUrl}" target="_blank" class="video-link">🎥 Ver ejecución correcta</a>` 
+                        : '';
+
+                    return `
                     <li class="exercise-item ${exercise.completed ? 'is-completed' : ''}" data-exercise-id="${exercise.id}">
                         <input type="checkbox" id="ex-${exercise.id}" class="exercise-checkbox" ${exercise.completed ? 'checked' : ''}>
                         <label for="ex-${exercise.id}" class="exercise-label">
                             <span class="exercise-name">${exercise.name}</span>
                             <span class="exercise-details">${exercise.details}</span>
-                            <a href="${exercise.videoUrl}" target="_blank" class="video-link">🎥 Ver ejecución correcta</a>
+                            ${videoLinkHTML}
                         </label>
                     </li>
-                `).join('')}
+                    `;
+                }).join('')}
             </ul>
         `;
         appContainer.appendChild(dayCard);
     });
 
-    // Siempre que renderizamos, actualizamos el resumen global superior
     updateWeeklySummary();
 }
 
 /* =========================================
-   [JS-3, JS-4, JS-7 y JS-8] EVENTOS Y LÓGICA
+   [NUEVO] LÓGICA DEL MENÚ LATERAL Y MODO OSCURO
    ========================================= */
 
-// Evento de checkboxes
+// Modo Oscuro
+const themeCheckbox = document.getElementById('theme-checkbox');
+themeCheckbox.addEventListener('change', (e) => {
+    if (e.target.checked) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+});
+
+// Menú Lateral (Sidebar)
+const menuBtn = document.getElementById('menu-btn');
+const closeBtn = document.getElementById('close-btn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebar-overlay');
+
+function toggleMenu() {
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+}
+
+menuBtn.addEventListener('click', toggleMenu);
+closeBtn.addEventListener('click', toggleMenu);
+overlay.addEventListener('click', toggleMenu);
+
+// Cerrar el menú automáticamente al hacer clic en un enlace
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', toggleMenu);
+});
+
+/* =========================================
+   EVENTOS PRINCIPALES (Checkboxes, Reset, Timer)
+   ========================================= */
+
 appContainer.addEventListener('change', (event) => {
     if (event.target.classList.contains('exercise-checkbox')) {
         const checkbox = event.target;
@@ -144,30 +190,26 @@ appContainer.addEventListener('change', (event) => {
         const newCompletedCount = day.exercises.filter(ex => ex.completed).length;
         dayCard.querySelector('.day-progress').textContent = `${newCompletedCount} de ${day.exercises.length} completados`;
 
-        // Llamar a la actualización global al marcar/desmarcar
         updateWeeklySummary();
     }
 });
 
-// Evento: Reiniciar Semana
 document.getElementById('btn-reset').addEventListener('click', () => {
     const confirmar = confirm("¿Estás seguro de que quieres reiniciar todos tus progresos de esta semana?");
     if (confirmar) {
         weeklyRoutine.forEach(day => {
             day.exercises.forEach(ex => ex.completed = false);
         });
-        renderApp(); // Volvemos a pintar toda la app limpia
+        renderApp(); 
     }
 });
 
-// Evento: Temporizador de Descanso
 let timerInterval;
 document.getElementById('btn-timer').addEventListener('click', (event) => {
     const btnTimer = event.target;
     const timerDisplay = document.getElementById('timer-display');
-    let timeLeft = 45; // 45 segundos de descanso por defecto
+    let timeLeft = 45; 
 
-    // Deshabilitar botón para evitar múltiples clics
     btnTimer.disabled = true;
     timerDisplay.textContent = `⏳ ${timeLeft}s`;
 
@@ -180,7 +222,6 @@ document.getElementById('btn-timer').addEventListener('click', (event) => {
             timerDisplay.textContent = "";
             btnTimer.disabled = false;
             
-            // Opcional: Sonido nativo super sencillo aprovechando la API de SpeechSynthesis (voz del navegador)
             const speech = new SpeechSynthesisUtterance("Tiempo de descanso finalizado. ¡A darle!");
             window.speechSynthesis.speak(speech);
             
